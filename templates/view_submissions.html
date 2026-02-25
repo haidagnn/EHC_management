@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2>📂 Danh Sách Sinh Viên Nộp Bài</h2>
+    <table class="table table-hover mt-3">
+        <thead class="table-dark">
+            <tr>
+                <th>Sinh viên</th>
+                <th>Tên file</th>
+                <th>Thời gian</th>
+                <th>Hành động</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for sub in subs %}
+            <tr>
+                <td>{{ sub.user.fullname }} ({{ sub.user.username }})</td>
+                <td>{{ sub.filename }}</td>
+                <td>{{ sub.submitted_at.strftime('%H:%M - %d/%m/%Y') }}</td>
+                <td>
+                    <a href="{{ url_for('download_submission', filename=sub.filename) }}" class="btn btn-outline-primary btn-sm">
+                        📥 Tải bài
+                    </a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <a href="{{ url_for('challenge') }}" class="btn btn-secondary">Quay lại</a>
+</div>
+{% endblock %}

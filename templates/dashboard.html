@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2>Danh Sách Lớp Học</h2>
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>Họ Tên</th>
+            <th>Email</th>
+            <th>SĐT</th>
+            <th>Vai trò</th>
+            <th>Trạng thái nộp bài</th>
+            <th>Hành động</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for user in users %}
+        <tr>
+            <td>{{ user.fullname }}</td>
+            
+            <form action="{{ url_for('edit_user', user_id=user.id) }}" method="POST">
+            <td>
+                {% if current_user.role == 'teacher' or current_user.id == user.id %}
+                    <input type="email" name="email" value="{{ user.email }}" class="form-control form-control-sm">
+                {% else %}
+                    {{ user.email }}
+                {% endif %}
+            </td>
+            <td>
+                {% if current_user.role == 'teacher' or current_user.id == user.id %}
+                    <input type="text" name="phone" value="{{ user.phone }}" class="form-control form-control-sm">
+                {% else %}
+                    {{ user.phone }}
+                {% endif %}
+            </td>
+            <td>
+                <span class="badge bg-{{ 'primary' if user.role == 'teacher' else 'secondary' }}">
+                    {{ user.role }}
+                </span>
+            </td>
+            <td>
+                {% if user.status == 'Đã nộp' %}
+                    <span class="badge bg-success">Đã nộp bài</span>
+                {% else %}
+                    <span class="badge bg-danger">Chưa nộp</span>
+                {% endif %}
+            </td>
+            <td>
+                {% if current_user.role == 'teacher' or current_user.id == user.id %}
+                    <button type="submit" class="btn btn-warning btn-sm">Lưu sửa</button>
+                {% endif %}
+            </td>
+            </form>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

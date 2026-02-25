@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2>Khu Vực Thử Thách (CTF)</h2>
+
+<div class="card mb-4">
+    <div class="card-body">
+        <h5 class="card-title">Gợi ý từ Giáo Viên:</h5>
+        <p class="card-text text-info fw-bold">{{ hint }}</p>
+        
+        <form method="POST" action="{{ url_for('challenge') }}">
+            <div class="mb-3">
+                <label>Nhập đáp án của bạn (Tên file không bao gồm .txt):</label>
+                <input type="text" name="answer" class="form-control" placeholder="Nhập câu trả lời...">
+            </div>
+            <button type="submit" class="btn btn-primary">Kiểm tra đáp án</button>
+        </form>
+
+        {% if success_file %}
+        <div class="mt-4 alert alert-success">
+            <p>🎉 Chính xác! Bạn đã tìm ra file: <strong>{{ success_file }}</strong></p>
+            <a href="{{ url_for('download_challenge', filename=success_file) }}" class="btn btn-success">
+                📥 Tải nội dung bài thơ/văn
+            </a>
+        </div>
+        {% endif %}
+    </div>
+</div>
+
+<hr>
+
+<div class="card mb-4 border-info">
+    <div class="card-body">
+        <h5 class="card-title">Nộp Bài Làm Của Bạn</h5>
+        <form method="POST" action="{{ url_for('upload_student_work') }}" enctype="multipart/form-data">
+            <div class="mb-3">
+                <input type="file" name="student_file" class="form-control" required>
+            </div>
+            <button type="submit" class="btn btn-info text-white">Nộp bài cho Giáo viên</button>
+        </form>
+    </div>
+</div>
+
+{% if current_user.role == 'teacher' %}
+<div class="alert alert-warning">
+    <h4>Khu vực Giáo Viên (Quản trị)</h4>
+    ...
+    <hr>
+    <h5>Danh sách sinh viên đã nộp bài:</h5>
+    <a href="{{ url_for('view_submissions') }}" class="btn btn-outline-dark btn-sm">Xem chi tiết bài nộp</a>
+</div>
+{% endif %}
+
+{% endblock %}
